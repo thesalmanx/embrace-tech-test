@@ -40,7 +40,7 @@ cd iphone-cover-customizer
 install dependencies:
 
 ```bash
-npm install
+npm install --legacy-peer-deps
 ```
 
 ▶️ Run the App
@@ -49,4 +49,4 @@ npm install
 npm run dev
 ```
 
-The app will be available at http://localhost:3000 🌍
+The app will be available at http://localhost:5173/ 🌍
