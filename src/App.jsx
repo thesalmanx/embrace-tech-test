@@ -1,8 +1,8 @@
-import { Canvas } from "@react-three/fiber";
+import { Canvas, useFrame } from "@react-three/fiber";
 import { OrbitControls, useGLTF, Environment, Bounds } from "@react-three/drei";
 import { Suspense, useState, useEffect, useRef, useMemo } from "react";
 import * as THREE from "three";
-import { a } from "@react-spring/three";
+import { a, useSpring } from "@react-spring/three";
 import heic2any from "heic2any";
 import "./App.css";
 import { AiOutlineArrowRight, AiOutlineArrowLeft } from "react-icons/ai";
@@ -19,6 +19,13 @@ function LoadingAnimation() {
 function Model({ textureUrl, rotation }) {
   const { scene } = useMemo(() => useGLTF("/iPhone16.glb"), []);
   const modelRef = useRef();
+  const [hovered, setHovered] = useState(false);
+
+  // Animate the scaling effect
+  const { scale } = useSpring({
+    scale: hovered ? 1.7 : 1.6, // Scale up when hovered
+    config: { mass: 1, tension: 200, friction: 20 }, // Smooth transition
+  });
 
   useEffect(() => {
     if (textureUrl) {
@@ -40,13 +47,21 @@ function Model({ textureUrl, rotation }) {
     }
   }, [textureUrl, scene]);
 
-  useEffect(() => {
+  useFrame(() => {
     if (modelRef.current) {
       modelRef.current.rotation.y = rotation;
     }
-  }, [rotation]);
+  });
 
-  return <a.primitive object={scene} ref={modelRef} scale={1.6} />;
+  return (
+    <a.primitive
+      object={scene}
+      ref={modelRef}
+      scale={scale}
+      onPointerOver={() => setHovered(true)}
+      onPointerOut={() => setHovered(false)}
+    />
+  );
 }
 
 function App() {
@@ -55,7 +70,7 @@ function App() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const timer = setTimeout(() => setIsLoading(false), 800);
+    const timer = setTimeout(() => setIsLoading(false), 600);
     return () => clearTimeout(timer);
   }, []);
 
@@ -100,9 +115,9 @@ function App() {
               <Bounds fit clip observe margin={1.1}>
                 <Model textureUrl={textureUrl} rotation={rotation} />
               </Bounds>
-              <ambientLight intensity={0.7} />
+              <ambientLight intensity={0.15} />
               <directionalLight position={[3, 5, 2]} intensity={0.1} />
-              <Environment preset="city" background={false} />
+              <Environment preset="city" />
               <OrbitControls enableDamping dampingFactor={0.15} />
             </Suspense>
           </Canvas>
