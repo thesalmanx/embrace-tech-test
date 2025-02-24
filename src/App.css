@@ -33,30 +33,30 @@
 }
 
 .main-container {
+  border-left: 0.2px solid rgb(201, 201, 201);
+  border-right: 0.2px solid rgb(201, 201, 201);
   display: flex;
   justify-content: center;
   align-items: center;
   width: 800px;
   height: 700px;
-  border-left: 0.2px solid rgb(201, 201, 201);
-  border-right: 0.2px solid rgb(201, 201, 201);
 }
 
 .content-wrapper {
+  border: 1px solid rgb(30, 26, 26);
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  border: 1px solid rgb(30, 26, 26);
+  flex-wrap: wrap;
 }
 
 .canvas-wrapper {
+  height: 100%;
+  width: 100%;
   display: flex;
+  justify-content: center;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 100%;
 }
 
 .customization-section {
@@ -67,10 +67,11 @@
 }
 
 .iphone-text {
-  font-size: 38px;
   font-weight: 400;
   color: #333;
-  margin: 0 0 8px 0;
+  margin: 0px;
+  font-size: 38px;
+  margin-bottom: 8px;
 }
 
 .upload-input {
@@ -78,15 +79,15 @@
 }
 
 .upload-btn {
-  background-color: #000;
+  background-color: #000000;
   color: #fff;
   padding: 10px 15px;
   border-radius: 30px;
   cursor: pointer;
   transition: background 0.3s;
-  font-family: "Cabin", sans-serif;
+  margin: 0px;
+  font-family: cabin;
   font-weight: lighter;
-  margin: 0;
 }
 
 .upload-btn:hover {
@@ -94,20 +95,20 @@
 }
 
 .control-btn {
-  display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 5px;
-  margin: 0 5px 10px;
   border: 0.1px solid black;
+  margin: 0px 5px;
+  padding: 5px;
   border-radius: 15px;
-  background-color: #fff;
+  margin-bottom: 10px;
+  background-color: rgb(255, 255, 255);
 }
 
 .abc {
   font-size: 17px;
-  color: #000;
+  color: #000000;
   cursor: pointer;
 }
 
@@ -138,7 +139,7 @@
   margin-top: 20px;
   font-size: 1.2rem;
   color: #333;
-  font-family: "Cabin", sans-serif;
+  font-family: cabin;
 }
 
 @keyframes spin {
