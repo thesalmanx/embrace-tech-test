@@ -21,10 +21,9 @@ function Model({ textureUrl, rotation }) {
   const modelRef = useRef();
   const [hovered, setHovered] = useState(false);
 
-  // Animate the scaling effect
   const { scale } = useSpring({
-    scale: hovered ? 1.7 : 1.6, // Scale up when hovered
-    config: { mass: 1, tension: 200, friction: 20 }, // Smooth transition
+    scale: hovered ? 1.7 : 1.6,
+    config: { mass: 1, tension: 200, friction: 20 },
   });
 
   useEffect(() => {
@@ -58,7 +57,7 @@ function Model({ textureUrl, rotation }) {
       object={scene}
       ref={modelRef}
       scale={scale}
-      rotation={[0, 3.25, 0]} // Slight tilt to reveal side buttons
+      rotation={[0, 3.25, 0]}
       onPointerOver={() => setHovered(true)}
       onPointerOut={() => setHovered(false)}
     />
