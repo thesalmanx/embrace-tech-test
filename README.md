@@ -1,5 +1,5 @@
 # 🚀 Embrace IT  
-###https://mytest.salmann.dev
+### https://mytest.salmann.dev
 ## 📱 iPhone Cover Customizer  
 
 ### 🎨 Customize Your iPhone Cover in 3D!  
@@ -31,7 +31,7 @@ This project allows users to upload their own images and preview them on a **3D 
 Clone the repository
 
 ```bash
-git clone https://github.com/your-username/iphone-cover-customizer.git
+git clone https://github.com/thesalmanx/embrace-tech-test.git
 ```
 ```bash
 cd iphone-cover-customizer
