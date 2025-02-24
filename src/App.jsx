@@ -1,6 +1,6 @@
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls, useGLTF, Environment, Bounds } from "@react-three/drei";
-import { Suspense, useState, useEffect, useRef } from "react";
+import { Suspense, useState, useEffect, useRef, useMemo } from "react";
 import * as THREE from "three";
 import { a } from "@react-spring/three";
 import heic2any from "heic2any";
@@ -17,27 +17,36 @@ function LoadingAnimation() {
 }
 
 function Model({ textureUrl, rotation }) {
-  const { scene } = useGLTF("/iPhone16.glb");
+  const { scene } = useMemo(() => useGLTF("/iPhone16.glb"), []);
   const modelRef = useRef();
 
   useEffect(() => {
     if (textureUrl) {
-      const textureLoader = new THREE.TextureLoader();
-      textureLoader.load(textureUrl, (texture) => {
-        texture.flipY = false;
-        scene.traverse((child) => {
-          if (child.isMesh) {
-            child.material.map = texture;
-            child.material.needsUpdate = true;
-          }
-        });
-      });
+      const loader = new THREE.TextureLoader();
+      loader.load(
+        textureUrl,
+        (texture) => {
+          texture.flipY = false;
+          scene.traverse((child) => {
+            if (child.isMesh) {
+              child.material.map = texture;
+              child.material.needsUpdate = true;
+            }
+          });
+        },
+        undefined,
+        (err) => console.error("Texture load failed:", err)
+      );
     }
   }, [textureUrl, scene]);
 
-  return (
-    <a.primitive object={scene} ref={modelRef} scale={1.6} rotation={[0, rotation + 0.08, 0]} />
-  );
+  useEffect(() => {
+    if (modelRef.current) {
+      modelRef.current.rotation.y = rotation;
+    }
+  }, [rotation]);
+
+  return <a.primitive object={scene} ref={modelRef} scale={1.6} />;
 }
 
 function App() {
@@ -46,7 +55,7 @@ function App() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const timer = setTimeout(() => setIsLoading(false), 1000);
+    const timer = setTimeout(() => setIsLoading(false), 800);
     return () => clearTimeout(timer);
   }, []);
 
@@ -58,14 +67,12 @@ function App() {
     reader.onload = async (e) => {
       if (file.type === "image/heic") {
         try {
-          const blob = new Blob([e.target.result], { type: file.type });
           const convertedBlob = await heic2any({
-            blob,
+            blob: new Blob([e.target.result], { type: file.type }),
             toType: "image/jpeg",
             quality: 0.8,
           });
-          const convertedURL = URL.createObjectURL(convertedBlob);
-          setTextureUrl(convertedURL);
+          setTextureUrl(URL.createObjectURL(convertedBlob));
         } catch (error) {
           console.error("HEIC conversion failed:", error);
         }
@@ -73,12 +80,11 @@ function App() {
         setTextureUrl(e.target.result);
       }
     };
+
     file.type === "image/heic" ? reader.readAsArrayBuffer(file) : reader.readAsDataURL(file);
   };
 
-  if (isLoading) {
-    return <LoadingAnimation />;
-  }
+  if (isLoading) return <LoadingAnimation />;
 
   return (
     <div className="app-container">
@@ -89,15 +95,15 @@ function App() {
 
       <main className="main-container">
         <div className="canvas-wrapper">
-          <Canvas className="canvas" shadows camera={{ position: [0, 0, 3], fov: 50 }}>
+          <Canvas shadows camera={{ position: [0, 0, 3], fov: 50 }}>
             <Suspense fallback={null}>
               <Bounds fit clip observe margin={1.1}>
                 <Model textureUrl={textureUrl} rotation={rotation} />
               </Bounds>
-              <ambientLight intensity={0.5} />
-              <directionalLight position={[5, 5, 5]} intensity={0.3} castShadow />
-              <Environment preset="city" />
-              <OrbitControls enableDamping dampingFactor={0.1} />
+              <ambientLight intensity={0.7} />
+              <directionalLight position={[3, 5, 2]} intensity={0.1} />
+              <Environment preset="city" background={false} />
+              <OrbitControls enableDamping dampingFactor={0.15} />
             </Suspense>
           </Canvas>
 
