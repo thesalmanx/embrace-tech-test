@@ -58,6 +58,7 @@ function Model({ textureUrl, rotation }) {
       object={scene}
       ref={modelRef}
       scale={scale}
+      rotation={[0, 3.25, 0]} // Slight tilt to reveal side buttons
       onPointerOver={() => setHovered(true)}
       onPointerOut={() => setHovered(false)}
     />
